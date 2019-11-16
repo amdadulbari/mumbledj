@@ -23,6 +23,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"go.reik.pl/mumbledj/interfaces"
+	"go.reik.pl/mumbledj/opusCodec"
 	"layeh.com/gumble/gumble"
 	"layeh.com/gumble/gumbleffmpeg"
 	"layeh.com/gumble/gumbleutil"
@@ -205,6 +206,9 @@ func (dj *MumbleDJ) Connect() error {
 	// Perform startup checks before connecting.
 	logrus.Infoln("Performing startup checks...")
 	PerformStartupChecks()
+
+	// Set up opus settings
+	opusCodec.Register(opusCodec.Application(viper.GetInt("encoding.application")), viper.GetBool("encoding.fec"), viper.GetInt("encoding.loss"))
 
 	// Create Gumble config.
 	dj.GumbleConfig = gumble.NewConfig()

@@ -129,6 +129,26 @@ volume:
     highest: 0.8
 
 
+encoding:
+
+    # controls default opus parameters
+    # You can pick from:
+    # 2048 (OPUS_APPLICATION_VOIP), this is what mumble normally uses
+    # 2049 (OPUS_APPLICATION_AUDIO), this gives best audio quality but low bandwidth hurts it
+    # 2051 (OPUS_APPLICATION_RESTRICTED_LOWDELAY) Don't use this one
+    application: 2049
+
+    # Forward Error Correction (FEC)
+    # enabling this allows better audio when packets are lost
+    fec: true
+
+    # Expected packet loss
+    # when FEC is enabled, what percentage of packets should we expect to lose
+    # setting this too high will result in bad audio quality
+    # a setting of zero effectively disables FEC
+    loss: 5
+
+
 admins:
 
     # Enable admins?

@@ -66,6 +66,11 @@ func SetDefaultConfig() {
 	viper.SetDefault("volume.lowest", 0.01)
 	viper.SetDefault("volume.highest", 0.8)
 
+	// Volume defaults.
+	viper.SetDefault("encoding.application", 2049)
+	viper.SetDefault("encoding.fec", true)
+	viper.SetDefault("encoding.loss", 5)
+
 	// Admins defaults.
 	viper.SetDefault("admins.enabled", true)
 	viper.SetDefault("admins.names", []string{"SuperUser"})

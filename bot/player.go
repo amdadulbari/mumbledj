@@ -20,9 +20,6 @@ import (
 	"github.com/spf13/viper"
 	"go.reik.pl/mumbledj/interfaces"
 	"layeh.com/gumble/gumbleffmpeg"
-
-	// needed for loading opus codes needed by gumble
-	_ "layeh.com/gumble/opus"
 )
 
 // Player should be special goroutine, which prefetch sound from videos and plays audio stream

@@ -17,9 +17,6 @@ import (
 
 	"github.com/spf13/viper"
 	"go.reik.pl/mumbledj/interfaces"
-
-	// needed for loading opus codes needed by gumble
-	_ "layeh.com/gumble/opus"
 )
 
 // Queue holds the audio tracks queue itself along with useful methods for
@@ -308,5 +305,5 @@ func (q *Queue) RandomNextTrack(queueWasEmpty bool) {
 }
 
 func (q *Queue) notify() {
-    // TODO: code deduplication and using sync.Cond
+	// TODO: code deduplication and using sync.Cond
 }
