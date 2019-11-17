@@ -1,4 +1,5 @@
 mumbledj
 assets/assets/config.yaml
+vendor
 coverage.txt
 *.coverprofile

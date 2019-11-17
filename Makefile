@@ -2,19 +2,35 @@ dirs = ./interfaces/... ./commands/... ./services/... ./bot/... .
 
 VERSION != git describe --tags | sed 's/\([^-]*-\)g/r\1/'
 
+ifeq ($(CC),musl-gcc)
+MUSL_FLAGS=-ldflags='-X "main.version=$(VERSION)" -linkmode=external "-extldflags=-static -s"'
+else
+MUSL_FLAGS=-ldflags='-X "main.version=$(VERSION)"'
+endif
+
+
 all: assets build ## Default action. Compile resources and builds MumbleDJ.
 
 build: *.go  ## Builds MumbleDJ.
-	@env go build -ldflags '-X "main.version=$(VERSION)"' .
+	env go build -ldflags '-X "main.version=$(VERSION)"' .
+
+.PHONY: build-static
+build-static: assets *.go
+	env go mod edit -replace gopkg.in/hraban/opus.v2=github.com/McKayJT/opus@static-build
+	env go mod vendor
+	@chmod 755 ./vendor/gopkg.in/hraban/opus.v2/make-opus.sh
+	env ./vendor/gopkg.in/hraban/opus.v2/make-opus.sh
+	env go build -mod=vendor -buildmode=exe $(MUSL_FLAGS)
+	env go mod edit -dropreplace=gopkg.in/hraban/opus.v2
 
 .PHONY: test
 test: ## Runs unit tests for MumbleDJ.
-	@env go test $(dirs)
+	env go test $(dirs)
 
 .PHONY: coverage
 coverage: ## Runs coverage tests for MumbleDJ.
-	@env overalls -project=go.reik.pl/mumbledj -covermode=atomic
-	@mv overalls.coverprofile coverage.txt
+	env overalls -project=go.reik.pl/mumbledj -covermode=atomic
+	mv overalls.coverprofile coverage.txt
 
 .PHONY: clean
 clean: ## Removes compiled MumbleDJ binaries.
@@ -31,8 +47,8 @@ dist: ## Performs cross-platform builds via gox for multiple Linux platforms.
 
 .PHONY: assets
 assets: ## Regenerates assets which will be bundled with binary
-	@go get github.com/gobuffalo/packr/v2/packr2
-	@packr2
+	go get github.com/gobuffalo/packr/v2/packr2
+	$(shell go env GOPATH)/bin/packr2
 
 .PHONY: help
 help: ## Shows this helptext.
